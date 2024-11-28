@@ -1,17 +1,15 @@
-﻿using HotelService.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using ReportService.Infrastructure.Data;
 
-namespace HotelService.Extensions
+namespace ReportService.API.Extansions
 {
     public static class DatabaseExtensions
     {
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("HotelServiceDb");
+            var connectionString = configuration.GetConnectionString("ReportServiceDb");
 
-            services.AddDbContext<HotelServiceDbContext>(options =>
+            services.AddDbContext<ReportServiceDbContext>(options =>
                 options.UseSqlServer(connectionString));
         }
     }

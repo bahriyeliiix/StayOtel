@@ -1,6 +1,13 @@
+using ReportService.API.Extansions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+#region Extansions
+builder.Services.AddCustomServices();
+builder.Services.AddCustomLogging(builder.Configuration);
+builder.Services.AddDatabase(builder.Configuration);
+#endregion
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
