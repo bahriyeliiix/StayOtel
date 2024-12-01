@@ -18,14 +18,15 @@
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Dtos\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HotelService.Application\HotelService.Application.csproj" />
     <ProjectReference Include="..\HotelService.Infrastructure\HotelService.Infrastructure.csproj" />
   </ItemGroup>
 
