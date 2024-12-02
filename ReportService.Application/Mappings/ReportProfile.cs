@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ReportService.Application.Features.Commands;
 using ReportService.Application.Features.DTOs;
 
 namespace ReportService.Application.Mappings
@@ -9,6 +10,14 @@ namespace ReportService.Application.Mappings
         {
             CreateMap<ReportData, ReportDto>().ReverseMap();
             CreateMap<ReportDto, ReportData>().ReverseMap();
+
+            CreateMap<ReportData, CreateReportCommand>().ReverseMap();
+            CreateMap<CreateReportCommand, ReportData>().ReverseMap();
+
+
+            CreateMap<ReportData, CreateReportCommand>().ReverseMap();
+            CreateMap<CreateReportCommand, ReportData>().ReverseMap();
+
         }
     }
 }
