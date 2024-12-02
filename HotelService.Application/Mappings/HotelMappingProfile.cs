@@ -2,6 +2,9 @@
 using HotelService.Application.Features.Hotels.DTOs;
 using HotelService.Domain.Entities;
 using HotelService.Application.Features.Hotels.Commands;
+using HotelService.Application.Features.HotelManagers.DTOs;
+using HotelService.Application.Features.HotelManagers.Commands;
+using HotelService.Application.Features.Hotels.Queries;
 
 namespace HotelService.Application.Mapping
 {
@@ -13,18 +16,26 @@ namespace HotelService.Application.Mapping
             CreateMap<Hotel, HotelDto>();
             CreateMap<HotelDto, Hotel>();
 
+            CreateMap<Hotel, HotelDetailDto>();
+            CreateMap<HotelDetailDto, Hotel>();
+
             CreateMap<Hotel, CreateHotelCommand>();
             CreateMap<CreateHotelCommand, Hotel>();
 
-            //// HotelManager Mappings
-            //CreateMap<HotelManager, HotelManagerDto>();
-            //CreateMap<HotelManagerDto, HotelManager>();
-            //CreateMap<HotelManager, CreateHotelManagerCommand>();
+            // HotelManager Mappings
+            CreateMap<HotelManager, HotelManagerDto>();
+            CreateMap<HotelManagerDto, HotelManager>();
 
-            //// HotelContact Mappings
-            //CreateMap<HotelContact, HotelContactDto>();
-            //CreateMap<HotelContactDto, HotelContact>();
-            //CreateMap<HotelContact, CreateHotelContactCommand>();
+
+            CreateMap<HotelManager, CreateHotelManagerCommand>();
+            CreateMap<CreateHotelManagerCommand, HotelManager>();
+
+            // HotelContact Mappings
+            CreateMap<HotelContact, HotelContactDto>();
+            CreateMap<HotelContactDto, HotelContact>();
+
+            CreateMap<HotelContact, CreateHotelContactCommand>();
+            CreateMap<CreateHotelContactCommand, HotelContact>();
         }
     }
 }
