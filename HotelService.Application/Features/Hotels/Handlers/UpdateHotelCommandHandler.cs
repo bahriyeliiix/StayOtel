@@ -25,6 +25,7 @@ namespace HotelService.Application.Features.Hotels.Handlers
             if (hotel == null)
                 throw new NotFoundException("Hotel not found");
 
+
             hotel.Name = request.Name;
             hotel.Address = request.Address;
             hotel.City = request.City;

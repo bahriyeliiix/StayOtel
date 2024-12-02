@@ -11,6 +11,13 @@ namespace HotelService.Infrastructure.Repositories
         Task AddAsync(Hotel hotel);
         Task UpdateAsync(Hotel hotel);
         Task DeleteAsync(Hotel hotel);
+
+
+        Task<HotelContact> GetHotelContactByIdAsync(Guid contactId);
+        Task AddHotelContactAsync(HotelContact contact);
+        Task UpdateHotelContactAsync(HotelContact hotel);
+        Task DeleteHotelContactAsync(Guid contactId);
+        Task<List<HotelContact>> GetHotelContactsAsync(Guid hotelId);
     }
 
     public class HotelRepository : IHotelRepository
@@ -27,6 +34,7 @@ namespace HotelService.Infrastructure.Repositories
             return await _context.Hotels
                                  .Include(h => h.Contacts)
                                  .Include(h => h.Managers)
+                                 .Where(a => a.IsDeleted == false)
                                  .FirstOrDefaultAsync(h => h.Id == id);
         }
 
@@ -35,6 +43,7 @@ namespace HotelService.Infrastructure.Repositories
             return await _context.Hotels
                                  .Include(h => h.Contacts)
                                  .Include(h => h.Managers)
+                                 .Where(a => a.IsDeleted == false)
                                  .ToListAsync();
         }
 
@@ -54,6 +63,41 @@ namespace HotelService.Infrastructure.Repositories
         {
             _context.Hotels.Remove(hotel);
             await _context.SaveChangesAsync();
+        }
+
+
+        public async Task<HotelContact> GetHotelContactByIdAsync(Guid contactId)
+        {
+            return await _context.HotelContacts.FindAsync(contactId);
+        }
+
+        public async Task AddHotelContactAsync(HotelContact contact)
+        {
+            await _context.HotelContacts.AddAsync(contact);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateHotelContactAsync(HotelContact hotel)
+        {
+            _context.HotelContacts.Update(hotel);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteHotelContactAsync(Guid contactId)
+        {
+            var contact = await _context.HotelContacts.FindAsync(contactId);
+            if (contact != null)
+            {
+                _context.HotelContacts.Remove(contact);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<List<HotelContact>> GetHotelContactsAsync(Guid hotelId)
+        {
+            return await _context.HotelContacts
+                                 .Where(c => c.HotelId == hotelId && c.IsDeleted == false)
+                                 .ToListAsync();
         }
     }
 }

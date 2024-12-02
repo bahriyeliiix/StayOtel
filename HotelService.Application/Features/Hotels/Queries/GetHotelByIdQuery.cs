@@ -3,7 +3,7 @@ using MediatR;
 
 namespace HotelService.Application.Features.Hotels.Queries.GetHotelById
 {
-    public class GetHotelByIdQuery : IRequest<HotelDto>
+    public class GetHotelByIdQuery : IRequest<HotelDetailDto>
     {
         public GetHotelByIdQuery(Guid id)
         {
