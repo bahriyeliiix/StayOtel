@@ -10,7 +10,7 @@ namespace ReportService.API.Extansions
             var connectionString = configuration.GetConnectionString("ReportServiceDb");
 
             services.AddDbContext<ReportServiceDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
         }
     }
 }
