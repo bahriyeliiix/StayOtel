@@ -1,4 +1,7 @@
+using MassTransit;
+using Microsoft.AspNetCore.Builder;
 using ReportService.API.Extansions;
+using ReportService.Infrastructure.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,10 @@ builder.Services.AddCustomServices();
 builder.Services.AddCustomLogging(builder.Configuration);
 builder.Services.AddDatabase(builder.Configuration);
 #endregion
+
+
+builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
+
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -19,6 +26,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/openapi/v1.json", "API v1");
+    });
 }
 
 app.UseHttpsRedirection();
