@@ -5,6 +5,7 @@ using HotelService.Application.Features.Hotels.DTOs;
 using HotelService.Application.Features.Hotels.Queries.GetHotelById;
 using Shared.Wrappers;
 using HotelService.Application.Features.Hotels.Queries;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace HotelService.Api.Controllers
 {
@@ -19,7 +20,8 @@ namespace HotelService.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("get-all")]
+        [SwaggerOperation(Summary = "Get a list of all hotels", OperationId = "GetAll")]
         public async Task<IActionResult> GetAllHotels()
         {
             var query = new GetAllHotelsQuery();
@@ -27,7 +29,7 @@ namespace HotelService.Api.Controllers
             return Ok(new ApiResponse<List<HotelDto>>(hotels, "Hotels fetched successfully"));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get-by-id/{id}")]
         public async Task<IActionResult> GetHotel(Guid id)
         {
             var query = new GetHotelByIdQuery(id);
@@ -36,10 +38,10 @@ namespace HotelService.Api.Controllers
             if (hotel == null)
                 return NotFound(new ApiResponse<object>(null, "Hotel not found", false, 404));
 
-            return Ok(new ApiResponse<HotelDto>(hotel, "Hotel fetched successfully"));
+            return Ok(new ApiResponse<HotelDetailDto>(hotel, "Hotel fetched successfully"));
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateHotel([FromBody] CreateHotelCommand command)
         {
             if (command == null)
@@ -49,7 +51,7 @@ namespace HotelService.Api.Controllers
             return CreatedAtAction(nameof(GetHotel), new { id = result }, new ApiResponse<Guid>(result, "Hotel created successfully"));
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("update/{id}")]
         public async Task<IActionResult> UpdateHotel(Guid id, [FromBody] UpdateHotelCommand command)
         {
             if (id != command.Id)
@@ -59,8 +61,7 @@ namespace HotelService.Api.Controllers
             return Ok(new ApiResponse<HotelDto>(result, "Hotel updated successfully"));
         }
 
-        // DELETE: api/hotel/{id}
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteHotel(Guid id)
         {
             var command = new DeleteHotelCommand { Id = id };
