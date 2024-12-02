@@ -25,6 +25,10 @@ namespace ReportService.Infrastructure.Repositories
 
         public async Task<ReportData> AddAsync(ReportData report)
         {
+            var localDateTime = DateTime.Now;
+            var utcDateTime = localDateTime.ToUniversalTime();
+
+            report.CreatedAt = utcDateTime;
             await _context.Reports.AddAsync(report);
             _context.SaveChanges();
 
