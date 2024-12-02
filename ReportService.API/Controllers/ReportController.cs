@@ -23,7 +23,6 @@ namespace ReportService.Api.Controllers
         }
 
 
-
         [HttpPost("create")]
         public async Task<IActionResult> CreateHotel([FromBody] CreateReportCommand command)
         {
