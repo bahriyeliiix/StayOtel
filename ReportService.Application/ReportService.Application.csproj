@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="Handlers\" />
-    <Folder Include="Mappings\" />
-    <Folder Include="Notifications\" />
-    <Folder Include="Queries\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +15,10 @@
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReportService.Infrastructure\ReportService.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
