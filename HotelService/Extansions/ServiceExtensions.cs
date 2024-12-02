@@ -21,6 +21,7 @@ namespace HotelService.API.Extansions
 
 
             services.AddScoped<IHotelRepository,HotelRepository>();
+            services.AddScoped<IHotelManagerRepository,HotelManagerRepository>();
         }
     }
 }
