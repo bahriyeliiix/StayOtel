@@ -1,9 +1,5 @@
-﻿using System.Reflection;
-using System.Runtime.Loader;
-using HotelService.Application.Features.Hotels.Handlers;
-using HotelService.Application.Mapping;
+﻿using HotelService.Application.Mapping;
 using HotelService.Infrastructure.Repositories;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace HotelService.API.Extansions
 {
@@ -13,15 +9,15 @@ namespace HotelService.API.Extansions
         {
             services.AddAutoMapper(typeof(HotelServiceMappingProfile));
 
-
-
             services.AddMediatR(config => config.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
-
 
 
 
             services.AddScoped<IHotelRepository,HotelRepository>();
             services.AddScoped<IHotelManagerRepository,HotelManagerRepository>();
+            services.AddScoped<IHotelRepositoryFactory, HotelRepositoryFactory>();
+            services.AddHostedService<RabbitMqBackgroundService>();
+
         }
     }
 }

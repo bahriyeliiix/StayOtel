@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using ReportService.Application.Interfaces;
 using ReportService.Application.Mappings;
+using ReportService.Infrastructure.Factory;
 using ReportService.Infrastructure.Messaging;
 using ReportService.Infrastructure.Repositories;
 
@@ -14,7 +15,8 @@ namespace ReportService.API.Extansions
             services.AddMediatR(config => config.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IReportProducer, ReportProducer>();
-
+            services.AddScoped<IReportRepositoryFactory, ReportRepositoryFactory>();
+            services.AddHostedService<RabbitMqReportBackgroundService>();
 
         }
     }

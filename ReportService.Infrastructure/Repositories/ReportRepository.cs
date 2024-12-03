@@ -13,6 +13,8 @@ namespace ReportService.Infrastructure.Repositories
         Task<ReportData> AddAsync(ReportData report);
         Task<ReportData?> GetByIdAsync(Guid id);
         Task<List<ReportData>> GetAllAsync();
+
+        Task<bool> UpdateAsync(ReportData report);
     }
     public class ReportRepository : IReportRepository
     {
@@ -46,6 +48,21 @@ namespace ReportService.Infrastructure.Repositories
             return await _context.Reports.ToListAsync();
         }
 
+        public async Task<bool> UpdateAsync(ReportData report)
+        {
+            var already = _context.Reports.FirstOrDefault(a => a.Id == report.Id);
 
+            already.PhoneCount = report.PhoneCount;
+            already.Status = Domain.Enums.ReportStatus.Completed;
+            already.HotelCount = report.HotelCount;
+            already.UpdatedAt = DateTime.Now;
+
+
+            _context.Reports.Update(already);
+            _context.SaveChanges();
+
+            return true;
+
+        }
     }
 }

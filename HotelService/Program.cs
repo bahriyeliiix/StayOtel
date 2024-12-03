@@ -1,5 +1,7 @@
-using HotelService.API.Extansions;
+﻿using HotelService.API.Extansions;
 using HotelService.Extensions;
+using HotelService.Infrastructure.Messaging;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ builder.Services.AddCustomServices();
 builder.Services.AddCustomLogging(builder.Configuration);
 builder.Services.AddDatabase(builder.Configuration);
 #endregion
+builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
+
+builder.Services.AddSingleton(provider => provider.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
 
 
 

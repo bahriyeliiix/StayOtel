@@ -45,7 +45,7 @@ namespace ReportService.Api.Controllers
         [HttpGet("get-by-id/{id}")]
         public async Task<IActionResult> GetHotel(Guid id)
         {
-            var query = new GetReportByIdQuery();
+            var query = new GetReportByIdQuery { Id = id };
             var report = await _mediator.Send(query);
 
             if (report == null)
@@ -54,7 +54,7 @@ namespace ReportService.Api.Controllers
             return Ok(new ApiResponse<ReportDto>(report, "report fetched successfully"));
         }
 
-      
+
 
 
 
