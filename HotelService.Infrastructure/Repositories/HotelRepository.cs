@@ -1,6 +1,10 @@
-﻿using HotelService.Domain.Entities;
+﻿using Azure.Core;
+using System.Threading;
+using HotelService.Domain.Entities;
+using HotelService.Domain.Enums;
 using HotelService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Shared.Messaging;
 
 namespace HotelService.Infrastructure.Repositories
 {
@@ -18,6 +22,9 @@ namespace HotelService.Infrastructure.Repositories
         Task UpdateHotelContactAsync(HotelContact hotel);
         Task DeleteHotelContactAsync(Guid contactId);
         Task<List<HotelContact>> GetHotelContactsAsync(Guid hotelId);
+
+
+        Task<ResponseReportMessage> GenerateReport(string location);
     }
 
     public class HotelRepository : IHotelRepository
@@ -98,6 +105,28 @@ namespace HotelService.Infrastructure.Repositories
             return await _context.HotelContacts
                                  .Where(c => c.HotelId == hotelId && c.IsDeleted == false)
                                  .ToListAsync();
+        }
+
+        public async Task<ResponseReportMessage> GenerateReport(string location)
+        {
+
+            var hotelsInLocation = await _context.Hotels
+                .Include(h => h.Contacts)
+                .Where(h => h.Contacts.Any(c => c.ContactType == ContactType.Location && c.ContactDetail == location))
+                .ToListAsync();
+
+            var hotelCount = hotelsInLocation.Count;
+
+            var phoneCount = hotelsInLocation
+                .SelectMany(h => h.Contacts)
+                .Count(c => c.ContactType == ContactType.Phone);
+
+            return new ResponseReportMessage
+            {
+                Location = location,
+                HotelCount = hotelCount,
+                PhoneCount = phoneCount
+            };
         }
     }
 }

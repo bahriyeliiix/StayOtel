@@ -4,7 +4,7 @@
     {
         Phone,
         Email,
-        Address,
+        Location,
         Fax,
         Website
     }
