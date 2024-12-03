@@ -4,6 +4,7 @@ using HotelService.Application.Features.HotelManagers.Queries;
 using HotelService.Application.Features.HotelManagers.DTOs;
 using HotelService.Infrastructure.Repositories;
 using AutoMapper;
+using Serilog;
 
 namespace HotelService.Application.Features.HotelManagers.Handlers
 {
@@ -20,9 +21,27 @@ namespace HotelService.Application.Features.HotelManagers.Handlers
 
         public async Task<HotelManagerDto> Handle(GetHotelManagerByHotelIdQuery request, CancellationToken cancellationToken)
         {
-            var manager = await _hotelManagerRepository.GetAllByHotelIdAsync(request.HotelId);
+            Log.Information("Fetching hotel manager for HotelId: {HotelId}", request.HotelId);
 
-            return _mapper.Map<HotelManagerDto>(manager);
+            try
+            {
+                
+                var manager = await _hotelManagerRepository.GetAllByHotelIdAsync(request.HotelId);
+
+                if (manager == null)
+                {
+                    Log.Warning("No hotel manager found for HotelId: {HotelId}", request.HotelId);
+                    return null;
+                }
+
+                Log.Information("Hotel manager fetched successfully for HotelId: {HotelId}", request.HotelId);
+                return _mapper.Map<HotelManagerDto>(manager);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error occurred while fetching hotel manager for HotelId: {HotelId}", request.HotelId);
+                throw; 
+            }
         }
     }
 }

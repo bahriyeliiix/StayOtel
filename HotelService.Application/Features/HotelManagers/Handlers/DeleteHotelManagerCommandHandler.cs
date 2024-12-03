@@ -3,6 +3,7 @@ using HotelService.Application.Features.HotelManagers.Commands;
 using AutoMapper;
 using HotelService.Infrastructure.Repositories;
 using Shared.Exceptions;
+using Serilog;
 
 namespace HotelService.Application.Features.HotelManagers.Handlers
 {
@@ -10,7 +11,6 @@ namespace HotelService.Application.Features.HotelManagers.Handlers
     {
         private readonly IHotelManagerRepository _hotelManagerRepository;
         private readonly IHotelRepository _hotelRepository;
-
         private readonly IMapper _mapper;
 
         public DeleteHotelManagerCommandHandler(IHotelManagerRepository hotelManagerRepository, IMapper mapper, IHotelRepository hotelRepository)
@@ -22,20 +22,37 @@ namespace HotelService.Application.Features.HotelManagers.Handlers
 
         public async Task Handle(DeleteHotelManagerCommand request, CancellationToken cancellationToken)
         {
-            var hotel = await _hotelRepository.GetByIdAsync(request.HotelId);
-            if (hotel == null)
-            {
-                throw new NotFoundException("Hotel not found");
-            }
+            Log.Information("Deleting hotel manager with ID: {ManagerId} for HotelId: {HotelId}", request.Id, request.HotelId);
 
-            var manager = hotel.Managers.FirstOrDefault(c => c.Id == request.Id && c.HotelId == request.HotelId);
-            if (manager == null)
+            try
             {
-                throw new NotFoundException("Hotel manager not found");
-            }
+              
+                var hotel = await _hotelRepository.GetByIdAsync(request.HotelId);
+                if (hotel == null)
+                {
+                    Log.Warning("Hotel not found for HotelId: {HotelId}", request.HotelId);
+                    throw new NotFoundException("Hotel not found");
+                }
 
-            manager.IsDeleted = true;
-            await _hotelManagerRepository.UpdateAsync(manager);
+            
+                var manager = hotel.Managers.FirstOrDefault(c => c.Id == request.Id && c.HotelId == request.HotelId);
+                if (manager == null)
+                {
+                    Log.Warning("Hotel manager not found with ID: {ManagerId} for HotelId: {HotelId}", request.Id, request.HotelId);
+                    throw new NotFoundException("Hotel manager not found");
+                }
+
+         
+                manager.IsDeleted = true;
+                await _hotelManagerRepository.UpdateAsync(manager);
+
+                Log.Information("Hotel manager with ID: {ManagerId} for HotelId: {HotelId} marked as deleted successfully", request.Id, request.HotelId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error occurred while deleting hotel manager with ID: {ManagerId} for HotelId: {HotelId}", request.Id, request.HotelId);
+                throw; 
+            }
         }
     }
 }

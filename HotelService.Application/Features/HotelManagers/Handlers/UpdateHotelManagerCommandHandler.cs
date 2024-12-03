@@ -6,6 +6,7 @@ using HotelService.Infrastructure.Repositories;
 using HotelService.Application.Features.Hotels.DTOs;
 using Shared.Exceptions;
 using HotelService.Application.Features.HotelManagers.Commands;
+using Serilog;
 
 namespace HotelService.Application.Features.HotelManagers.Handlers
 {
@@ -13,7 +14,6 @@ namespace HotelService.Application.Features.HotelManagers.Handlers
     {
         private readonly IHotelManagerRepository _hotelManagerRepository;
         private readonly IMapper _mapper;
-
 
         public UpdateHotelManagerCommandHandler(IHotelManagerRepository hotelManagerRepository, IMapper mapper)
         {
@@ -23,10 +23,13 @@ namespace HotelService.Application.Features.HotelManagers.Handlers
 
         public async Task<HotelManagerDto> Handle(HotelManagerUpdateCommand request, CancellationToken cancellationToken)
         {
+            Log.Information("Attempting to update Hotel Manager with ID: {ManagerId}", request.Id);
+
             var hotelManager = await _hotelManagerRepository.GetByIdAsync(request.Id);
 
             if (hotelManager == null)
             {
+                Log.Warning("HotelManager with ID {ManagerId} not found", request.Id);
                 throw new NotFoundException($"HotelManager with ID {request.Id} not found.");
             }
 
@@ -37,6 +40,7 @@ namespace HotelService.Application.Features.HotelManagers.Handlers
 
             await _hotelManagerRepository.UpdateAsync(hotelManager);
 
+            Log.Information("Hotel Manager with ID {ManagerId} updated successfully", request.Id);
 
             return _mapper.Map<HotelManagerDto>(hotelManager);
         }
