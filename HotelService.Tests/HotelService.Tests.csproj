@@ -119,17 +119,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\DeleteHotelCommandHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UnitTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.1.16.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
     <Analyzer Include="..\packages\xunit.analyzers.1.16.0\analyzers\dotnet\cs\xunit.analyzers.fixes.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HotelService.Application\HotelService.Application.csproj">
+      <Project>{7175b1ad-79e8-4354-aa8f-ac65941759dc}</Project>
+      <Name>HotelService.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotelService.Core\HotelService.Domain.csproj">
+      <Project>{82249421-ad00-494f-88b4-86015c881e39}</Project>
+      <Name>HotelService.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotelService.Infrastructure\HotelService.Infrastructure.csproj">
+      <Project>{9e5784c1-4d52-4d72-bc0d-76576544d8a1}</Project>
+      <Name>HotelService.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
