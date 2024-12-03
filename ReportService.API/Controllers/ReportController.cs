@@ -24,7 +24,7 @@ namespace ReportService.Api.Controllers
 
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateHotel([FromBody] CreateReportCommand command)
+        public async Task<IActionResult> CreateReport([FromBody] CreateReportCommand command)
         {
             if (command == null)
                 return BadRequest(new ApiResponse<string>(null, "report data is null", false, 400));
@@ -43,7 +43,18 @@ namespace ReportService.Api.Controllers
         }
 
         [HttpGet("get-by-id/{id}")]
-        public async Task<IActionResult> GetHotel(Guid id)
+        public async Task<IActionResult> GetReport(Guid id)
+        {
+            var query = new GetReportByIdQuery();
+            var report = await _mediator.Send(query);
+
+            if (report == null)
+                return NotFound(new ApiResponse<object>(null, "report not found", false, 404));
+
+            return Ok(new ApiResponse<ReportDto>(report, "report fetched successfully"));
+        }   
+        [HttpGet("get-all")]
+        public async Task<IActionResult> GetAllReport()
         {
             var query = new GetReportByIdQuery { Id = id };
             var report = await _mediator.Send(query);
