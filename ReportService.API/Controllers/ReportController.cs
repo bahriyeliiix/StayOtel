@@ -34,7 +34,6 @@ namespace ReportService.Api.Controllers
             var createReportMessage = new CreateReportMessage
             {
                 ReportId = result,
-                RequestedAt = DateTime.UtcNow,
                 Location = command.Location
             };
             await _reportProducer.PublishReportRequestAsync(createReportMessage);
@@ -56,13 +55,13 @@ namespace ReportService.Api.Controllers
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAllReport()
         {
-            var query = new GetReportByIdQuery { Id = id };
+            var query = new GetAllReportsQuery();
             var report = await _mediator.Send(query);
 
             if (report == null)
                 return NotFound(new ApiResponse<object>(null, "report not found", false, 404));
 
-            return Ok(new ApiResponse<ReportDto>(report, "report fetched successfully"));
+            return Ok(new ApiResponse<List<ReportDto>>(report, "report fetched successfully"));
         }
 
 

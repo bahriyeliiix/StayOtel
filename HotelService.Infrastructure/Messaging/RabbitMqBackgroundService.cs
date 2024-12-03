@@ -109,7 +109,7 @@ public class RabbitMqBackgroundService : BackgroundService
             using var connection = await factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
 
-            await channel.QueueDeclareAsync(queue: _rabbitMqSettings.QueueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+            await channel.QueueDeclareAsync(queue: _rabbitMqSettings.ReQueueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
 
             await channel.BasicPublishAsync(exchange: string.Empty, routingKey: _rabbitMqSettings.ReQueueName, body: body);
 

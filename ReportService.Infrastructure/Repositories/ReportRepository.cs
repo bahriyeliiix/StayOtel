@@ -31,6 +31,7 @@ namespace ReportService.Infrastructure.Repositories
             var utcDateTime = localDateTime.ToUniversalTime();
 
             report.CreatedAt = utcDateTime;
+            report.RequestedAt = utcDateTime;
             await _context.Reports.AddAsync(report);
             _context.SaveChanges();
 
@@ -50,12 +51,16 @@ namespace ReportService.Infrastructure.Repositories
 
         public async Task<bool> UpdateAsync(ReportData report)
         {
+
+            var localDateTime = DateTime.Now;
+            var utcDateTime = localDateTime.ToUniversalTime();
+
             var already = _context.Reports.FirstOrDefault(a => a.Id == report.Id);
 
             already.PhoneCount = report.PhoneCount;
             already.Status = Domain.Enums.ReportStatus.Completed;
             already.HotelCount = report.HotelCount;
-            already.UpdatedAt = DateTime.Now;
+            already.UpdatedAt = utcDateTime;
 
 
             _context.Reports.Update(already);

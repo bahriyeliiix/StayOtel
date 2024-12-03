@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Options;
 using ReportService.API.Extansions;
 using ReportService.Infrastructure.Messaging;
 
@@ -13,8 +14,10 @@ builder.Services.AddDatabase(builder.Configuration);
 #endregion
 
 
+
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
 
+builder.Services.AddSingleton(provider => provider.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
